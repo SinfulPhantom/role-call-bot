@@ -9,8 +9,6 @@ token = getenv("TOKEN")
 intents = discord.Intents.default()
 intents.members = True
 
-GUILD = discord.Object(id=978803693820452874)
-
 
 class Client(discord.Client):
     def __init__(self):
@@ -20,7 +18,7 @@ class Client(discord.Client):
     async def on_ready(self):
         await self.wait_until_ready()
         if not self.synced:
-            await tree.sync(guild=GUILD)
+            await tree.sync()
             self.synced = True
 
 
@@ -29,15 +27,14 @@ tree = app_commands.CommandTree(client)
 
 
 @tree.command(
-    name="role_call",
+    name="roll_call",
     description="This command snapshots the members of a specific VC.",
-    guild=GUILD
 )
 async def self(interaction: discord.Interaction, channel_id: str):
     voice_channel = client.get_channel(int(channel_id))
-    role_call = get_vc_members(voice_channel)
+    roll_call = get_vc_members(voice_channel)
     await interaction.response.send_message(embed=embed_message(
-        vc_members=role_call,
+        vc_members=roll_call,
         channel=voice_channel)
     )
 
